@@ -1,0 +1,289 @@
+<!--
+Author: Sebastian Proctor-Shah
+-->
+
+<!DOCTYPE html>
+<html lang='en'> 
+	<head>
+		<title>GOL</title>	
+		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+		<script>
+		
+			//game variables
+			var gridSettings = {
+				rows: 50,
+				cols: 50,
+				width: 24,
+				height: 24,
+			};
+		
+			
+			var smallGridSettings = {
+				rows: 50,
+				cols: 50,
+				width: 24,
+				height: 24,
+			};
+			
+			var mediumGridSettings = {
+				rows: 100,
+				cols: 100,
+				width: 12,
+				height: 12,
+			};
+			
+			var largeGridSettings = {
+				rows: 200,
+				cols: 200,
+				width: 6,
+				height: 6,
+			};
+					
+			var context;
+			
+			
+			var deadTileImage = new Image();
+			var aliveTileImage = new Image();
+			
+			deadTileImage.src = "Box_Orange_Small_24x24.png";
+			aliveTileImage.src = "Box_Green_Small_24x24.png";
+
+
+			var generation = 0;
+			var population = 0;
+			var gameSpeed = 150;
+			var simulation;  //simulation interval function
+			var running = false;
+			
+			var gameBoard = new Array(gridSettings.rows);
+			var updatedGameBoard = new Array(gridSettings.rows);
+			
+			window.onload = function() {
+				var canvas = document.getElementById("gCanvas");
+				context = canvas.getContext("2d");
+				initializeGameBoard();
+				displayBoard();
+				
+			}
+			
+			
+			//create game boards
+			function initializeGameBoard() {
+				for(var i  = 0; i < gridSettings.rows; i++){
+					gameBoard[i] = new Array(gridSettings.cols);
+					updatedGameBoard[i] = new Array(gridSettings.cols);
+					for(var x = 0; x < gridSettings.cols; x++) {
+						gameBoard[i][x] = "dead";
+						updatedGameBoard[i][x] = "dead";
+					}
+				}
+			}
+					
+			function displayBoard(){
+
+				context.clearRect(0,0,1200,1200);
+				var xPos = 0;
+				var yPos = 0;
+				
+				for(var rowIndex = 0; rowIndex < gridSettings.rows; rowIndex++) {
+					for(var columnIndex = 0; columnIndex < gridSettings.cols; columnIndex++) {
+						if(gameBoard[rowIndex][columnIndex] == "dead") {
+							context.drawImage(deadTileImage,xPos,yPos);
+						} else {
+							context.drawImage(aliveTileImage,xPos,yPos);
+						}					
+						xPos += gridSettings.height;
+					}					
+					yPos += gridSettings.width;
+					xPos = 0;
+				}
+					
+			}
+			
+			//game settings
+			
+			function setGridSize(size){
+				if(size == "small") {
+					gridSettings = smallGridSettings;
+					deadTileImage.src = "Box_Orange_Small_24x24.png";
+					aliveTileImage.src = "Box_Green_Small_24x24.png";
+					resetSimulation();	
+				} else if(size == "medium") {
+					gridSettings = mediumGridSettings;
+					deadTileImage.src = "Box_Orange_Medium_12x12.png";
+					aliveTileImage.src = "Box_Green_Medium_12x12.png";
+					resetSimulation();
+				} else if(size == "large") {
+					gridSettings = largeGridSettings;
+					deadTileImage.src = "Box_Orange_Large_6x6.png";
+					aliveTileImage.src = "Box_Green_Large_6x6.png";
+					resetSimulation();
+				}
+			}
+			
+			function setGameSpeed(speed) {
+				if(!running) {
+					if(speed == "increase" && gameSpeed < 500) {
+						gameSpeed += 50;
+					} else if(speed == "decrease" && gameSpeed > 50) {
+						gameSpeed -= 50;
+					}
+					document.getElementById("game speed").innerHTML = "Game Speed: " + gameSpeed + " ms";
+				}
+			}
+				
+			function setTiles(event) {
+				var x = event.pageX;
+				var y = event.pageY;
+				
+				var xPos = 0;
+				var yPos = 0;
+
+				var rowIndex = Math.floor((y-110)/gridSettings.height);
+				var colIndex = Math.floor((x-10)/gridSettings.width);
+				
+				xPos += colIndex * gridSettings.width;
+				yPos += rowIndex * gridSettings.height;
+				
+				if(gameBoard[rowIndex][colIndex] == "dead") {
+					gameBoard[rowIndex][colIndex] = "alive";
+					population++;					
+				} else {
+					gameBoard[rowIndex][colIndex] = "dead";
+					population--;
+				}
+				document.getElementById("population").innerHTML = "Population: " + population;
+				displayBoard();	
+			}
+			
+			//game controls
+			
+			function startSimulation() {
+				if(!running) {
+					running = true;
+					simulation = setInterval(
+						function(){
+							population = 0;
+							generation++;
+							getNextGen(); 
+							var temp = gameBoard;
+							gameBoard = updatedGameBoard;
+							updatedGameBoard = temp;
+							displayBoard();
+							document.getElementById("generation").innerHTML = "Generation: " + generation;
+							document.getElementById("population").innerHTML = "Population: " + population;
+						}, gameSpeed);
+				}
+			}
+			
+			function pauseSimulation() {
+				running = false;
+				clearInterval(simulation);
+			}
+			
+			function resetSimulation() {
+				running = false;
+				clearInterval(simulation);
+				initializeGameBoard();
+				generation = 0;
+				population = 0;
+				document.getElementById("generation").innerHTML = "Generation: " + generation;
+				document.getElementById("population").innerHTML = "Population: " + population;
+				displayBoard();					
+			}
+				
+			//game logic
+			
+			function getNextGen() {
+				for(var rowIndex = 0; rowIndex < gridSettings.rows; rowIndex++) {
+					for(var columnIndex = 0; columnIndex < gridSettings.cols; columnIndex++) {
+						var numAliveNeighbors = getNumAliveNeighbors(rowIndex, columnIndex);
+						if(gameBoard[rowIndex][columnIndex] == "dead") {
+							if(numAliveNeighbors != 3) {
+								updatedGameBoard[rowIndex][columnIndex] = "dead";
+							} else {
+								updatedGameBoard[rowIndex][columnIndex] = "alive";
+								population++;
+							}
+						} else if(gameBoard[rowIndex][columnIndex] == "alive") {
+							if(numAliveNeighbors != 2 && numAliveNeighbors != 3) {
+								updatedGameBoard[rowIndex][columnIndex] = "dead";
+							} else {
+								updatedGameBoard[rowIndex][columnIndex] = "alive";
+								population++;
+							}
+						}				
+					}					
+				}
+			} 
+			
+			function getNumAliveNeighbors(row, col) {
+				var numAliveNeighbors = 0;				
+				if(row != 0 && col != 0 && gameBoard[row - 1][col - 1] == "alive") {
+					numAliveNeighbors++;
+				}
+				if(row != 0 && gameBoard[row - 1][col] == "alive" ) {
+					numAliveNeighbors++;
+				}
+				if(row != 0 && col != gridSettings.cols - 1 && gameBoard[row - 1][col + 1] == "alive") {  
+					numAliveNeighbors++;
+				}
+				if(col != 0 && gameBoard[row][col - 1] == "alive") {
+					numAliveNeighbors++;
+				}
+				if(col != gridSettings.cols - 1 && gameBoard[row][col + 1] == "alive") {
+					numAliveNeighbors++;
+				}
+				if(row != gridSettings.rows - 1 && col != 0 && gameBoard[row + 1][col - 1] == "alive") {
+					numAliveNeighbors++;
+				}
+				if(row != gridSettings.rows - 1 && gameBoard[row + 1][col] == "alive") {
+					numAliveNeighbors++;
+				}
+				if(row != gridSettings.rows - 1 && gridSettings.cols - 1 && gameBoard[row + 1][col + 1] == "alive") {
+					numAliveNeighbors++;	
+				}
+				return numAliveNeighbors;
+			}		
+		</script>
+	</head>
+	<body>
+		<nav class="navbar navbar-default navbar-fixed-top">
+			<div align = "center"> 
+				
+				
+
+				<div class="row">
+				
+				
+					<button type="button" onclick='setGridSize("small")' class="btn btn-default"><img src = "Small_Grid_24x24.png"> </button>
+					<button type="button" onclick='setGridSize("medium")' class="btn btn-default"><img src = "Medium_Grid_12x12.png"> </button>
+					<button type="button" onclick='setGridSize("large")' class="btn btn-default"><img src = "Large_Grid_6x6.png"> </button>
+					<img src = "GOLBanner.jpg">
+					<button type="button" onclick="startSimulation()" class="btn btn-success"><span class="glyphicon glyphicon-play" aria-hidden="true"></span> Start </button>
+					<button type="button" onclick="pauseSimulation()" class="btn btn-warning"><span class="glyphicon glyphicon-pause" aria-hidden="true"></span> Pause </button>
+					<button type="button" onclick="resetSimulation()" class="btn btn-danger"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span> Reset </button>
+					
+					<button type="button" onclick='setGameSpeed("decrease")' class="btn btn-default"><span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span></button>
+					<button type="button" onclick='setGameSpeed("increase")' class="btn btn-default"><span class="glyphicon glyphicon-minus-sign" aria-hidden="true"></span></button>
+				</div>
+				<div class="row">
+					<strong><span id="generation" style ="font-family: monospace">Generation: 0 </span></strong>&nbsp&nbsp&nbsp&nbsp
+					<strong><span id="population" style ="font-family: monospace">Population: 0 </span></strong>&nbsp&nbsp&nbsp&nbsp
+					<strong><span id="game speed" style ="font-family: monospace">Game Speed: 150 ms </span></strong>
+				</div>
+			</div>	
+		</nav>
+		<div id='gamecanvas' style="position:relative; top:110px; left:15px; ">  
+              <canvas id = "gCanvas" width = "1200" height = "1200" onclick="setTiles(event)"></canvas>
+		</div>
+		<div id = "gameCanvas">
+			
+		</div>
+
+
+		
+
+
+	<body>
+</html>

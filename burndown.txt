@@ -1,0 +1,40 @@
+--pause
+
+--reset
+
+--resume
+
+--set grid size 
+	small medium large 
+
+--set speed +, - gliphicon
+
+--population 
+
+enable/disable music
+
+view rules
+
+select pattern
+	-R-pentomino
+	-Diehard
+	-Acorn 
+	-Gliders by the dozen
+	-Puffer 1
+	-Gosper glider gun
+	
+add song (Cuckoo afx)
+
+launch
+
+
+
+issues
+======
+
+resoltion medium/large
+performance large	
+accuracy setTiles large
+double click set size
+
+
