@@ -7,7 +7,9 @@ Author: Sebastian Proctor-Shah
 	<head>
 		<title>GOL</title>	
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
+		
 		<script>
+		
 		
 			//game variables
 			var gridSettings = {
@@ -86,6 +88,7 @@ Author: Sebastian Proctor-Shah
 				var yPos = 0;
 				
 				for(var rowIndex = 0; rowIndex < gridSettings.rows; rowIndex++) {
+					xPos = 0;
 					for(var columnIndex = 0; columnIndex < gridSettings.cols; columnIndex++) {
 						if(gameBoard[rowIndex][columnIndex] == "dead") {
 							context.drawImage(deadTileImage,xPos,yPos);
@@ -95,9 +98,7 @@ Author: Sebastian Proctor-Shah
 						xPos += gridSettings.height;
 					}					
 					yPos += gridSettings.width;
-					xPos = 0;
 				}
-					
 			}
 			
 			//game settings
@@ -140,7 +141,7 @@ Author: Sebastian Proctor-Shah
 				var yPos = 0;
 
 				var rowIndex = Math.floor((y-110)/gridSettings.height);
-				var colIndex = Math.floor((x-10)/gridSettings.width);
+				var colIndex = Math.floor((x-15)/gridSettings.width);
 				
 				xPos += colIndex * gridSettings.width;
 				yPos += rowIndex * gridSettings.height;
@@ -153,6 +154,49 @@ Author: Sebastian Proctor-Shah
 					population--;
 				}
 				document.getElementById("population").innerHTML = "Population: " + population;
+				displayBoard();	
+			}
+			
+			var RPentominoCoords = [[0,0], [1,0], [-1,0], [-1,1], [0,-1]];
+			var Diehard = [[0,1], [0,2], [0,3], [-2,2], [0,-3], [-1,-3], [-1,-4]];					
+			var Acorn = [[0,1], [0,2], [0,3], [0,-2], [0,-3], [-2,-2], [-1,0]];
+			var GlidersByTheDozen = [[-1,-2], [-1,-1], [-1,2], [0,-2], [0,2], [1,-2], [1,1], [1,2]];
+			var Butterfly = [[0,-1], [0,1], [-1,-1], [-1,1], [-2,-1], [-2,1], [-2,0]];
+			var GosperGliderGun = [[0,-17], [0,-16], [0,-7], [0,-1], [0,3], [0,4], [-2,18], [-2,17], [-3,5], [-3,7], [-4,7], [-2,3],
+									[1,-17], [1,-16], [1,-7], [1,-3], [1,-1], [1,0], [1,5], [1,7], [2,7], [2,-1], [2,-7], [3,-2],
+									[-1,-2], [3,-6], [4,-5], [4,-4], [-2,4], [-1,-6], [-2,-5], [-2,-4], [-1,3], [-1,4], [-1,17], [-1,18]];
+			
+			function setPattern() {
+				var centerRowIndex = gridSettings.rows / 2;
+				var centerColIndex = gridSettings.cols / 2;	
+				var patternSelected = document.getElementById("patternSelect").value;
+				
+				resetSimulation();
+					if(patternSelected == "R-pentomino") {
+						patternSelected = RPentominoCoords;
+						population = 5;
+					} else if (patternSelected == "Diehard") {
+						patternSelected = Diehard;
+						population = 7;
+					} else if (patternSelected == "Acorn") {
+						patternSelected = Acorn;
+						population = 7;
+					} else if (patternSelected == "Gliders by the dozen") {
+						patternSelected = GlidersByTheDozen;
+						population = 8;
+					} else if (patternSelected == "Butterfly") {
+						patternSelected = Butterfly;
+						population = 7;
+					} else if (patternSelected == "Gosper glider gun") {
+						patternSelected = GosperGliderGun;
+						population = 36;
+					} 	
+				
+				for(var index = 0; index < patternSelected.length; index++) {
+					gameBoard[centerRowIndex + patternSelected[index][0]][centerColIndex + patternSelected[index][1]] = "alive";
+						
+				}
+				document.getElementById("population").innerHTML = "Population: " + population;				
 				displayBoard();	
 			}
 			
@@ -270,7 +314,19 @@ Author: Sebastian Proctor-Shah
 				<div class="row">
 					<strong><span id="generation" style ="font-family: monospace">Generation: 0 </span></strong>&nbsp&nbsp&nbsp&nbsp
 					<strong><span id="population" style ="font-family: monospace">Population: 0 </span></strong>&nbsp&nbsp&nbsp&nbsp
-					<strong><span id="game speed" style ="font-family: monospace">Game Speed: 150 ms </span></strong>
+					<strong><span id="game speed" style ="font-family: monospace">Game Speed: 150 ms </span></strong>&nbsp&nbsp&nbsp&nbsp
+		
+					<select id = "patternSelect" onchange="setPattern()">
+						<option disabled selected> Pattern </option>
+						<option value = "R-pentomino">R-pentomino</option>
+						<option value = "Diehard">Diehard</option>
+						<option value = "Acorn">Acorn </option>
+						<option value = "Gliders by the dozen">Gliders by the dozen</option>
+						<option value = "Butterfly">Butterfly</option>
+						<option value = "Gosper glider gun">Gosper glider gun</option>
+					</select>
+					
+					
 				</div>
 			</div>	
 		</nav>
@@ -280,8 +336,8 @@ Author: Sebastian Proctor-Shah
 		<div id = "gameCanvas">
 			
 		</div>
-
-
+		
+		
 		
 
 
