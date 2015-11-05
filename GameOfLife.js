@@ -1,12 +1,5 @@
 		
-//game variables
-var gridSettings = {
-	rows: 50,
-	cols: 50,
-	width: 24,
-	height: 24,
-};
-			
+//size settings		
 var smallGridSettings = {
 	rows: 50,
 	cols: 50,
@@ -27,17 +20,29 @@ var largeGridSettings = {
 	width: 6,
 	height: 6,
 };
-					
+
+//relative pattern coordinates			
+var RPentominoCoords = [[0,0], [1,0], [-1,0], [-1,1], [0,-1]];
+var Diehard = [[0,1], [0,2], [0,3], [-2,2], [0,-3], [-1,-3], [-1,-4]];					
+var Acorn = [[0,1], [0,2], [0,3], [0,-2], [0,-3], [-2,-2], [-1,0]];
+var GlidersByTheDozen = [[-1,-2], [-1,-1], [-1,2], [0,-2], [0,2], [1,-2], [1,1], [1,2]];
+var Butterfly = [[0,-1], [0,1], [-1,-1], [-1,1], [-2,-1], [-2,1], [-2,0]];
+var GosperGliderGun = [[0,-17], [0,-16], [0,-7], [0,-1], [0,3], [0,4], [-2,18], [-2,17], [-3,5], [-3,7], [-4,7], [-2,3],
+						[1,-17], [1,-16], [1,-7], [1,-3], [1,-1], [1,0], [1,5], [1,7], [2,7], [2,-1], [2,-7], [3,-2],
+						[-1,-2], [3,-6], [4,-5], [4,-4], [-2,4], [-1,-6], [-2,-5], [-2,-4], [-1,3], [-1,4], [-1,17], [-1,18]];
+						
 var context;						
 var deadTileImage = new Image();
 var aliveTileImage = new Image();
-			
+
+//default settings			
 deadTileImage.src = "Images/Box_Orange_Small_24x24.png";
 aliveTileImage.src = "Images/Box_Green_Small_24x24.png";
+var gridSettings = smallGridSettings;
+var gameSpeed = 150;
 
 var generation = 0;
 var population = 0;
-var gameSpeed = 150;
 var simulation;  //simulation interval function
 var running = false;
 var gameBoard = new Array(gridSettings.rows);
@@ -102,25 +107,22 @@ function updateBoard(){
 	}
 }
 		
-//game settings
-			
+//game settings		
 function setGridSize(size){
 	if(size == "small") {
 		gridSettings = smallGridSettings;
 		deadTileImage.src = "Images/Box_Orange_Small_24x24.png";
 		aliveTileImage.src = "Images/Box_Green_Small_24x24.png";
-		resetSimulation();	
 	} else if(size == "medium") {
 		gridSettings = mediumGridSettings;
 		deadTileImage.src = "Images/Box_Orange_Medium_12x12.png";
 		aliveTileImage.src = "Images/Box_Green_Medium_12x12.png";
-		resetSimulation();
 	} else if(size == "large") {
 		gridSettings = largeGridSettings;
 		deadTileImage.src = "Images/Box_Orange_Large_6x6.png";
 		aliveTileImage.src = "Images/Box_Green_Large_6x6.png";
-		resetSimulation();
 	}
+	resetSimulation();	
 }
 			
 function setGameSpeed(speed) {
@@ -154,16 +156,7 @@ function setTiles(event) {
 	document.getElementById("population").innerHTML = "Population: " + population;
 	displayBoard();	
 }
-			
-var RPentominoCoords = [[0,0], [1,0], [-1,0], [-1,1], [0,-1]];
-var Diehard = [[0,1], [0,2], [0,3], [-2,2], [0,-3], [-1,-3], [-1,-4]];					
-var Acorn = [[0,1], [0,2], [0,3], [0,-2], [0,-3], [-2,-2], [-1,0]];
-var GlidersByTheDozen = [[-1,-2], [-1,-1], [-1,2], [0,-2], [0,2], [1,-2], [1,1], [1,2]];
-var Butterfly = [[0,-1], [0,1], [-1,-1], [-1,1], [-2,-1], [-2,1], [-2,0]];
-var GosperGliderGun = [[0,-17], [0,-16], [0,-7], [0,-1], [0,3], [0,4], [-2,18], [-2,17], [-3,5], [-3,7], [-4,7], [-2,3],
-						[1,-17], [1,-16], [1,-7], [1,-3], [1,-1], [1,0], [1,5], [1,7], [2,7], [2,-1], [2,-7], [3,-2],
-						[-1,-2], [3,-6], [4,-5], [4,-4], [-2,4], [-1,-6], [-2,-5], [-2,-4], [-1,3], [-1,4], [-1,17], [-1,18]];
-			
+
 function setPattern() {
 	var centerRowIndex = gridSettings.rows / 2;
 	var centerColIndex = gridSettings.cols / 2;	
@@ -197,8 +190,7 @@ function setPattern() {
 	displayBoard();	
 }
 			
-//game controls
-			
+//game controls		
 function startSimulation() {
 	if(!running) {
 		running = true;
@@ -233,8 +225,7 @@ function resetSimulation() {
 	displayBoard();					
 }
 				
-//game logic
-			
+//game logic			
 function getNextGen() {
 	for(var rowIndex = 0; rowIndex < gridSettings.rows; rowIndex++) {
 		for(var columnIndex = 0; columnIndex < gridSettings.cols; columnIndex++) {
@@ -259,30 +250,37 @@ function getNextGen() {
 } 
 			
 function getNumAliveNeighbors(row, col) {
-	var numAliveNeighbors = 0;				
-	if(row != 0 && col != 0 && gameBoard[row - 1][col - 1] == "alive") {
-		numAliveNeighbors++;
-	}
-	if(row != 0 && gameBoard[row - 1][col] == "alive" ) {
-		numAliveNeighbors++;
-	}
-	if(row != 0 && col != gridSettings.cols - 1 && gameBoard[row - 1][col + 1] == "alive") {  
-		numAliveNeighbors++;
-	}
+	var numAliveNeighbors = 0;
+	
+	if(row !=0) {
+		if(col != 0 && gameBoard[row - 1][col - 1] == "alive") {
+			numAliveNeighbors++;
+		}
+		if(gameBoard[row - 1][col] == "alive" ) {
+			numAliveNeighbors++;
+		}
+		if(col != gridSettings.cols - 1 && gameBoard[row - 1][col + 1] == "alive") {  
+			numAliveNeighbors++;
+		}
+	}	
+	
 	if(col != 0 && gameBoard[row][col - 1] == "alive") {
 		numAliveNeighbors++;
 	}
 	if(col != gridSettings.cols - 1 && gameBoard[row][col + 1] == "alive") {
 		numAliveNeighbors++;
 	}
-	if(row != gridSettings.rows - 1 && col != 0 && gameBoard[row + 1][col - 1] == "alive") {
-		numAliveNeighbors++;
-	}
-	if(row != gridSettings.rows - 1 && gameBoard[row + 1][col] == "alive") {
-		numAliveNeighbors++;
-	}
-	if(row != gridSettings.rows - 1 && gridSettings.cols - 1 && gameBoard[row + 1][col + 1] == "alive") {
-		numAliveNeighbors++;	
+	
+	if(row != gridSettings.rows - 1) {
+		if(col != 0 && gameBoard[row + 1][col - 1] == "alive") {
+			numAliveNeighbors++;
+		}
+		if(gameBoard[row + 1][col] == "alive") {
+			numAliveNeighbors++;
+		}
+		if(gridSettings.cols - 1 && gameBoard[row + 1][col + 1] == "alive") {
+			numAliveNeighbors++;	
+		}	
 	}
 	return numAliveNeighbors;
 }				
