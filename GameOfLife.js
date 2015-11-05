@@ -80,24 +80,45 @@ function displayBoard(){
 		yPos += gridSettings.width;
 	}
 }
-			
+
+function updateBoard(){
+	var xPos = 0;
+	var yPos = 0;
+				
+	for(var rowIndex = 0; rowIndex < gridSettings.rows; rowIndex++) {
+		xPos = 0;
+		for(var columnIndex = 0; columnIndex < gridSettings.cols; columnIndex++) {
+			if(gameBoard[rowIndex][columnIndex] != updatedGameBoard[rowIndex][columnIndex]) {
+				context.clearRect(xPos,yPos,gridSettings.width,gridSettings.height);
+				if(gameBoard[rowIndex][columnIndex] == "dead") {
+					context.drawImage(deadTileImage,xPos,yPos);
+				} else {
+					context.drawImage(aliveTileImage,xPos,yPos);
+				}
+			}					
+			xPos += gridSettings.height;
+		}					
+		yPos += gridSettings.width;
+	}
+}
+		
 //game settings
 			
 function setGridSize(size){
 	if(size == "small") {
 		gridSettings = smallGridSettings;
-		deadTileImage.src = "Box_Orange_Small_24x24.png";
-		aliveTileImage.src = "Box_Green_Small_24x24.png";
+		deadTileImage.src = "Images/Box_Orange_Small_24x24.png";
+		aliveTileImage.src = "Images/Box_Green_Small_24x24.png";
 		resetSimulation();	
 	} else if(size == "medium") {
 		gridSettings = mediumGridSettings;
-		deadTileImage.src = "Box_Orange_Medium_12x12.png";
-		aliveTileImage.src = "Box_Green_Medium_12x12.png";
+		deadTileImage.src = "Images/Box_Orange_Medium_12x12.png";
+		aliveTileImage.src = "Images/Box_Green_Medium_12x12.png";
 		resetSimulation();
 	} else if(size == "large") {
 		gridSettings = largeGridSettings;
-		deadTileImage.src = "Box_Orange_Large_6x6.png";
-		aliveTileImage.src = "Box_Green_Large_6x6.png";
+		deadTileImage.src = "Images/Box_Orange_Large_6x6.png";
+		aliveTileImage.src = "Images/Box_Green_Large_6x6.png";
 		resetSimulation();
 	}
 }
@@ -189,7 +210,7 @@ function startSimulation() {
 				var temp = gameBoard;
 				gameBoard = updatedGameBoard;
 				updatedGameBoard = temp;
-				displayBoard();
+				updateBoard();
 				document.getElementById("generation").innerHTML = "Generation: " + generation;
 				document.getElementById("population").innerHTML = "Population: " + population;
 			}, gameSpeed);
