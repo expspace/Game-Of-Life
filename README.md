@@ -1,4 +1,3 @@
-
 # Game-Of-Life
 
 This is a web based version of the popular Game Of Life, built using HTML, Javascript and CSS (Bootsrap).
@@ -9,4 +8,4 @@ This is a web based version of the popular Game Of Life, built using HTML, Javas
 * adjustable game speed
 * six interesting patterns to select from
 
-
+<img src="https://github.com/sebastianshah/Game-Of-Life/blob/master/GOL.png"> 
