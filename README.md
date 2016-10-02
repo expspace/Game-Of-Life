@@ -8,6 +8,12 @@ This is a web based version of the popular Game Of Life, built using HTML, Javas
 * adjustable game speed
 * six interesting patterns to select from
 
+#### Screen Shots
+
 <img src="https://github.com/EXPSPACE/Game-Of-Life/blob/master/GOLS1.png"> 
+
+
 <img src="https://github.com/EXPSPACE/Game-Of-Life/blob/master/GOLS3.png"> 
+
+
 <img src="https://github.com/EXPSPACE/Game-Of-Life/blob/master/GOLS2.png"> 
