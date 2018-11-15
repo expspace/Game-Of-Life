@@ -10,9 +10,9 @@ Author: Sebastian Proctor-Shah
 		<script src = "GameOfLife.js"></script>
 	</head>
 	<body>
-		<nav class="navbar navbar-default navbar-fixed-top">
-			<div align = "center"> 
-				<div class="row">	
+		<nav class="navbar navbar-default">
+			<div align = "center">
+				<div class="row">
 					<button type="button" onclick='setGridSize("small")' class="btn btn-default"><img src = "Images/Small_Grid_24x24.png"> </button>
 					<button type="button" onclick='setGridSize("medium")' class="btn btn-default"><img src = "Images/Medium_Grid_12x12.png"> </button>
 					<button type="button" onclick='setGridSize("large")' class="btn btn-default"><img src = "Images/Large_Grid_6x6.png"> </button>
@@ -20,7 +20,7 @@ Author: Sebastian Proctor-Shah
 					<button type="button" onclick="startSimulation()" class="btn btn-success"><span class="glyphicon glyphicon-play" aria-hidden="true"></span> Start </button>
 					<button type="button" onclick="pauseSimulation()" class="btn btn-warning"><span class="glyphicon glyphicon-pause" aria-hidden="true"></span> Pause </button>
 					<button type="button" onclick="resetSimulation()" class="btn btn-danger"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span> Reset </button>
-					
+
 					<button type="button" onclick='setGameSpeed("increase")' class="btn btn-default"><span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span></button>
 					<button type="button" onclick='setGameSpeed("decrease")' class="btn btn-default"><span class="glyphicon glyphicon-minus-sign" aria-hidden="true"></span></button>
 				</div>
@@ -28,7 +28,7 @@ Author: Sebastian Proctor-Shah
 					<strong><span id="generation" style ="font-family: monospace">Generation: 0 </span></strong>&nbsp&nbsp&nbsp&nbsp
 					<strong><span id="population" style ="font-family: monospace">Population: 0 </span></strong>&nbsp&nbsp&nbsp&nbsp
 					<strong><span id="game speed" style ="font-family: monospace">Game Speed: 150 ms </span></strong>&nbsp&nbsp&nbsp&nbsp
-		
+
 					<select id = "patternSelect" onchange="setPattern()">
 						<option disabled selected> Pattern </option>
 						<option value = "R-pentomino">R-pentomino</option>
@@ -37,12 +37,12 @@ Author: Sebastian Proctor-Shah
 						<option value = "Gliders by the dozen">Gliders by the dozen</option>
 						<option value = "Butterfly">Butterfly</option>
 						<option value = "Gosper glider gun">Gosper glider gun</option>
-					</select>	
+					</select>
 				</div>
-			</div>	
+			</div>
 		</nav>
-		<div id='gamecanvas' style="position:relative; top:110px; left:15px; ">  
-              <canvas id = "gCanvas" width = "1200" height = "1200" onclick="setTiles(event)"></canvas>
+		<div id='gamecanvas'>
+              <canvas id = "gCanvas" width = "1200" height = "1200" style = "display:block; margin:0 auto;" onclick="setTiles(event)"></canvas>
 		</div>
 	<body>
 </html>

@@ -137,12 +137,12 @@ function setGameSpeed(speed) {
 }
 				
 function setTiles(event) {
-	var x = event.pageX;
-	var y = event.pageY;
+	var x = event.offsetX;
+	var y = event.offsetY;
 	var xPos = 0;
 	var yPos = 0;
-	var rowIndex = Math.floor((y-110)/gridSettings.height);
-	var colIndex = Math.floor((x-15)/gridSettings.width);
+	var rowIndex = Math.floor((y)/gridSettings.height);
+	var colIndex = Math.floor((x)/gridSettings.width);
 	xPos += colIndex * gridSettings.width;
 	yPos += rowIndex * gridSettings.height;
 				
