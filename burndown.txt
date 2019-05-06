@@ -1,37 +1,19 @@
---pause
+use svg tiles
+board fill viewport height/width 
+view rules pdf popup
+condense navbar height
+invert speed controls to generations/sec range [1,20]
+set alive/dead tile colors (also banner colors)
+extract pattern data to json
+import/export data file
+save/delete pattern
 
---reset
-
---resume
-
---set grid size 
-	small medium large 
-
---set speed +, - gliphicon
-
---population 
-
---select pattern
-	-R-pentomino
-	-Diehard
-	-Acorn 
-	-Gliders by the dozen
-	-Butterfly
-	-Gosper glider gun
-
-
-view rules
-
-launch
-
-
+deployment
 
 issues
 ======
 
-resoltion medium/large
-performance large	
---accuracy setTiles large
+resoltion medium/large	
 double click set size
 
 
