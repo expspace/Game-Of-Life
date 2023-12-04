@@ -1,4 +1,5 @@
-		
+/** config data **/
+
 //size settings		
 const smallGridSettings = {
 	rows: 50,
@@ -22,41 +23,70 @@ const largeGridSettings = {
 };
 
 //relative pattern coordinates			
-const RPentominoCoords = [[0,0], [1,0], [-1,0], [-1,1], [0,-1]];
-const Diehard = [[0,1], [0,2], [0,3], [-2,2], [0,-3], [-1,-3], [-1,-4]];
-const Acorn = [[0,1], [0,2], [0,3], [0,-2], [0,-3], [-2,-2], [-1,0]];
-const GlidersByTheDozen = [[-1,-2], [-1,-1], [-1,2], [0,-2], [0,2], [1,-2], [1,1], [1,2]];
-const Butterfly = [[0,-1], [0,1], [-1,-1], [-1,1], [-2,-1], [-2,1], [-2,0]];
-const GosperGliderGun = [[0,-17], [0,-16], [0,-7], [0,-1], [0,3], [0,4], [-2,18], [-2,17], [-3,5], [-3,7], [-4,7], [-2,3],
-						[1,-17], [1,-16], [1,-7], [1,-3], [1,-1], [1,0], [1,5], [1,7], [2,7], [2,-1], [2,-7], [3,-2],
-						[-1,-2], [3,-6], [4,-5], [4,-4], [-2,4], [-1,-6], [-2,-5], [-2,-4], [-1,3], [-1,4], [-1,17], [-1,18]];
-						
+const RPentominoCoords =         [[0,0], [1,0], [-1,0], [-1,1], [0,-1]];
+const Diehard =                  [[0,1], [0,2], [0,3], [-2,2], [0,-3], [-1,-3], [-1,-4]];
+const Acorn =                    [[0,1], [0,2], [0,3], [0,-2], [0,-3], [-2,-2], [-1,0]];
+const GlidersByTheDozen =        [[-1,-2], [-1,-1], [-1,2], [0,-2], [0,2], [1,-2], [1,1], [1,2]];
+const Butterfly =                [[0,-1], [0,1], [-1,-1], [-1,1], [-2,-1], [-2,1], [-2,0]];
+const GosperGliderGun =          [[0,-17], [0,-16], [0,-7], [0,-1], [0,3], [0,4], [-2,18], [-2,17], [-3,5], [-3,7], [-4,7], [-2,3],
+						         [1,-17], [1,-16], [1,-7], [1,-3], [1,-1], [1,0], [1,5], [1,7], [2,7], [2,-1], [2,-7], [3,-2],
+	                             [-1,-2], [3,-6], [4,-5], [4,-4], [-2,4], [-1,-6], [-2,-5], [-2,-4], [-1,3], [-1,4], [-1,17], [-1,18]];
+
+
+
 let context;
 let deadTileImage = new Image();
 let aliveTileImage = new Image();
-
-//default settings			
 deadTileImage.src = "Images/Box_Orange_Small_24x24.png";
 aliveTileImage.src = "Images/Box_Green_Small_24x24.png";
+
+
+/** game state **/
+
+let generation;
+let population;
+let simulation;  //simulation interval function
+let running = false;
+let gameBoard;
+let updatedGameBoard;
 let gridSettings = smallGridSettings;
 let gameSpeed = 150;
 
-let generation = 0;
-let population = 0;
-let simulation;  //simulation interval function
-let running = false;
-let gameBoard = new Array(gridSettings.rows);
-let updatedGameBoard = new Array(gridSettings.rows);
-			
+
 window.onload = function() {
 	const canvas = document.getElementById("gCanvas");
 	context = canvas.getContext("2d");
 	initializeGameBoard();
 	displayBoard();
 }
-					
-//create game boards
+
+
+
+/** game logic **/
+
+function startSimulation() {
+	if(!running) {
+		running = true;
+		simulation = setInterval(
+			function(){
+				getNextGen();
+				let temp = gameBoard;
+				gameBoard = updatedGameBoard;
+				updatedGameBoard = temp;
+				updateBoard();
+				document.getElementById("generation").innerHTML = "Generation: " + generation;
+				document.getElementById("population").innerHTML = "Population: " + population;
+
+			}, gameSpeed);
+	}
+}
+
 function initializeGameBoard() {
+	population = 0;
+	generation = 0;
+	gameBoard = new Array(gridSettings.rows);
+	updatedGameBoard = new Array(gridSettings.rows);
+
 	for(let i  = 0; i < gridSettings.rows; i++){
 		gameBoard[i] = new Array(gridSettings.cols);
 		updatedGameBoard[i] = new Array(gridSettings.cols);
@@ -66,7 +96,74 @@ function initializeGameBoard() {
 		}
 	}
 }
-					
+
+function getNextGen() {
+	population = 0;
+	generation++;
+
+	for(let rowIndex = 0; rowIndex < gridSettings.rows; rowIndex++) {
+		for(let columnIndex = 0; columnIndex < gridSettings.cols; columnIndex++) {
+			let numAliveNeighbors = getNumAliveNeighbors(rowIndex, columnIndex);
+			if(gameBoard[rowIndex][columnIndex] === "dead") {
+				if(numAliveNeighbors !== 3) {
+					updatedGameBoard[rowIndex][columnIndex] = "dead";
+				} else {
+					updatedGameBoard[rowIndex][columnIndex] = "alive";
+					population++;
+				}
+			} else if(gameBoard[rowIndex][columnIndex] === "alive") {
+				if(numAliveNeighbors !== 2 && numAliveNeighbors !== 3) {
+					updatedGameBoard[rowIndex][columnIndex] = "dead";
+				} else {
+					updatedGameBoard[rowIndex][columnIndex] = "alive";
+					population++;
+				}
+			}
+		}
+	}
+}
+
+function getNumAliveNeighbors(row, col) {
+	let numAliveNeighbors = 0;
+
+	if(row !== 0) {
+		if(col !== 0 && gameBoard[row - 1][col - 1] === "alive") {
+			numAliveNeighbors++;
+		}
+		if(gameBoard[row - 1][col] === "alive" ) {
+			numAliveNeighbors++;
+		}
+		if(col !== gridSettings.cols - 1 && gameBoard[row - 1][col + 1] === "alive") {
+			numAliveNeighbors++;
+		}
+	}
+
+	if(col !== 0 && gameBoard[row][col - 1] === "alive") {
+		numAliveNeighbors++;
+	}
+
+	if(col !== gridSettings.cols - 1 && gameBoard[row][col + 1] === "alive") {
+		numAliveNeighbors++;
+	}
+
+	if(row !== gridSettings.rows - 1) {
+		if(col !== 0 && gameBoard[row + 1][col - 1] === "alive") {
+			numAliveNeighbors++;
+		}
+		if(gameBoard[row + 1][col] === "alive") {
+			numAliveNeighbors++;
+		}
+		if(col !== gridSettings.cols - 1 && gameBoard[row + 1][col + 1] === "alive") {
+			numAliveNeighbors++;
+		}
+	}
+	return numAliveNeighbors;
+}
+
+
+
+/** view logic **/
+
 function displayBoard(){
 	context.clearRect(0,0,1200,1200);
 	let xPos = 0;
@@ -79,14 +176,14 @@ function displayBoard(){
 				context.drawImage(deadTileImage,xPos,yPos);
 			} else {
 				context.drawImage(aliveTileImage,xPos,yPos);
-			}					
+			}
 			xPos += gridSettings.height;
-		}					
+		}
 		yPos += gridSettings.width;
 	}
 }
 
-function updateBoard(){
+function updateBoard() {
 	let xPos = 0;
 	let yPos = 0;
 				
@@ -94,9 +191,9 @@ function updateBoard(){
 		xPos = 0;
 		for(let columnIndex = 0; columnIndex < gridSettings.cols; columnIndex++) {
 			if(gameBoard[rowIndex][columnIndex] !== updatedGameBoard[rowIndex][columnIndex]) {
-				context.clearRect(xPos,yPos,gridSettings.width,gridSettings.height);
+				context.clearRect(xPos, yPos, gridSettings.width, gridSettings.height);
 				if(gameBoard[rowIndex][columnIndex] === "dead") {
-					context.drawImage(deadTileImage,xPos,yPos);
+					context.drawImage(deadTileImage, xPos,yPos);
 				} else {
 					context.drawImage(aliveTileImage,xPos,yPos);
 				}
@@ -139,13 +236,9 @@ function setGameSpeed(speed) {
 function setTiles(event) {
 	let x = event.offsetX;
 	let y = event.offsetY;
-	let xPos = 0;
-	let yPos = 0;
 	let rowIndex = Math.floor((y)/gridSettings.height);
 	let colIndex = Math.floor((x)/gridSettings.width);
-	xPos += colIndex * gridSettings.width;
-	yPos += rowIndex * gridSettings.height;
-				
+
 	if(gameBoard[rowIndex][colIndex] === "dead") {
 		gameBoard[rowIndex][colIndex] = "alive";
 		population++;					
@@ -190,25 +283,8 @@ function setPattern() {
 	displayBoard();	
 }
 			
-//game controls		
-function startSimulation() {
-	if(!running) {
-		running = true;
-		simulation = setInterval(
-			function(){
-				population = 0;
-				generation++;
-				getNextGen(); 
-				let temp = gameBoard;
-				gameBoard = updatedGameBoard;
-				updatedGameBoard = temp;
-				updateBoard();
-				document.getElementById("generation").innerHTML = "Generation: " + generation;
-				document.getElementById("population").innerHTML = "Population: " + population;
-			}, gameSpeed);
-	}
-}
-			
+//game controls
+
 function pauseSimulation() {
 	running = false;
 	clearInterval(simulation);
@@ -218,69 +294,8 @@ function resetSimulation() {
 	running = false;
 	clearInterval(simulation);
 	initializeGameBoard();
-	generation = 0;
-	population = 0;
 	document.getElementById("generation").innerHTML = "Generation: " + generation;
 	document.getElementById("population").innerHTML = "Population: " + population;
-	displayBoard();					
+	displayBoard();
 }
 				
-//game logic			
-function getNextGen() {
-	for(let rowIndex = 0; rowIndex < gridSettings.rows; rowIndex++) {
-		for(let columnIndex = 0; columnIndex < gridSettings.cols; columnIndex++) {
-			let numAliveNeighbors = getNumAliveNeighbors(rowIndex, columnIndex);
-			if(gameBoard[rowIndex][columnIndex] === "dead") {
-				if(numAliveNeighbors !== 3) {
-					updatedGameBoard[rowIndex][columnIndex] = "dead";
-				} else {
-					updatedGameBoard[rowIndex][columnIndex] = "alive";
-					population++;
-				}
-			} else if(gameBoard[rowIndex][columnIndex] === "alive") {
-				if(numAliveNeighbors !== 2 && numAliveNeighbors !== 3) {
-					updatedGameBoard[rowIndex][columnIndex] = "dead";
-				} else {
-					updatedGameBoard[rowIndex][columnIndex] = "alive";
-					population++;
-				}
-			}				
-		}					
-	}
-} 
-			
-function getNumAliveNeighbors(row, col) {
-	let numAliveNeighbors = 0;
-	
-	if(row !== 0) {
-		if(col !== 0 && gameBoard[row - 1][col - 1] === "alive") {
-			numAliveNeighbors++;
-		}
-		if(gameBoard[row - 1][col] === "alive" ) {
-			numAliveNeighbors++;
-		}
-		if(col !== gridSettings.cols - 1 && gameBoard[row - 1][col + 1] === "alive") {
-			numAliveNeighbors++;
-		}
-	}	
-	
-	if(col !== 0 && gameBoard[row][col - 1] === "alive") {
-		numAliveNeighbors++;
-	}
-	if(col !== gridSettings.cols - 1 && gameBoard[row][col + 1] === "alive") {
-		numAliveNeighbors++;
-	}
-	
-	if(row !== gridSettings.rows - 1) {
-		if(col !== 0 && gameBoard[row + 1][col - 1] === "alive") {
-			numAliveNeighbors++;
-		}
-		if(gameBoard[row + 1][col] === "alive") {
-			numAliveNeighbors++;
-		}
-		if(gridSettings.cols - 1 && gameBoard[row + 1][col + 1] === "alive") {
-			numAliveNeighbors++;	
-		}	
-	}
-	return numAliveNeighbors;
-}				
