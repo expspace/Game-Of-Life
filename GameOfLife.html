@@ -21,13 +21,13 @@ Author: Sebastian Proctor-Shah
 					<button type="button" onclick="pauseSimulation()" class="btn btn-warning"><span class="glyphicon glyphicon-pause" aria-hidden="true"></span> Pause </button>
 					<button type="button" onclick="resetSimulation()" class="btn btn-danger"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span> Reset </button>
 
-					<button type="button" onclick='setGameSpeed("increase")' class="btn btn-default"><span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span></button>
-					<button type="button" onclick='setGameSpeed("decrease")' class="btn btn-default"><span class="glyphicon glyphicon-minus-sign" aria-hidden="true"></span></button>
+					<button type="button" onclick='setGameSpeed(-50)' class="btn btn-default"><span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span></button>
+					<button type="button" onclick='setGameSpeed(50)' class="btn btn-default"><span class="glyphicon glyphicon-minus-sign" aria-hidden="true"></span></button>
 				</div>
 				<div class="row">
 					<strong><span id="generation" style ="font-family: monospace">Generation: 0 </span></strong>&nbsp&nbsp&nbsp&nbsp
 					<strong><span id="population" style ="font-family: monospace">Population: 0 </span></strong>&nbsp&nbsp&nbsp&nbsp
-					<strong><span id="game speed" style ="font-family: monospace">Game Speed: 150 ms </span></strong>&nbsp&nbsp&nbsp&nbsp
+					<strong><span id="game speed" style ="font-family: monospace">Game Speed: 150 ms/gen </span></strong>&nbsp&nbsp&nbsp&nbsp
 
 					<select id = "patternSelect" onchange="setPattern()">
 						<option disabled selected> Pattern </option>

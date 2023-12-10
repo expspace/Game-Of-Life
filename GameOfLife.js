@@ -74,8 +74,8 @@ function startSimulation() {
 				gameBoard = updatedGameBoard;
 				updatedGameBoard = temp;
 				updateBoard();
-				document.getElementById("generation").innerHTML = "Generation: " + generation;
-				document.getElementById("population").innerHTML = "Population: " + population;
+				document.getElementById("generation").innerHTML = `Generation: ${generation}`;
+				document.getElementById("population").innerHTML = `Population: ${population}`;
 
 			}, gameSpeed);
 	}
@@ -224,12 +224,10 @@ function setGridSize(size){
 			
 function setGameSpeed(speed) {
 	if(!running) {
-		if(speed === "increase" && gameSpeed < 500) {
-			gameSpeed += 50;
-		} else if(speed === "decrease" && gameSpeed > 50) {
-			gameSpeed -= 50;
-		}
-		document.getElementById("game speed").innerHTML = "Game Speed: " + gameSpeed + " ms";
+		const newSpeed = gameSpeed + speed;
+		if(newSpeed > 0  && newSpeed < 550)
+		gameSpeed = newSpeed;
+		document.getElementById("game speed").innerHTML = `Game Speed: ${gameSpeed} ms/gen`;
 	}
 }
 				
@@ -246,7 +244,7 @@ function setTiles(event) {
 		gameBoard[rowIndex][colIndex] = "dead";
 		population--;
 	}
-	document.getElementById("population").innerHTML = "Population: " + population;
+	document.getElementById("population").innerHTML = `Population: ${population}`;
 	displayBoard();	
 }
 
@@ -258,28 +256,24 @@ function setPattern() {
 	resetSimulation();
 		if(patternSelected === "R-pentomino") {
 			patternSelected = RPentominoCoords;
-			population = 5;
 		} else if (patternSelected === "Diehard") {
 			patternSelected = Diehard;
-			population = 7;
 		} else if (patternSelected === "Acorn") {
 			patternSelected = Acorn;
-			population = 7;
 		} else if (patternSelected === "Gliders by the dozen") {
 			patternSelected = GlidersByTheDozen;
-			population = 8;
 		} else if (patternSelected === "Butterfly") {
 			patternSelected = Butterfly;
-			population = 7;
 		} else if (patternSelected === "Gosper glider gun") {
 			patternSelected = GosperGliderGun;
-			population = 36;
-		} 	
+		}
+
+		population = patternSelected.length;
 				
 	for(let index = 0; index < patternSelected.length; index++) {
 		gameBoard[centerRowIndex + patternSelected[index][0]][centerColIndex + patternSelected[index][1]] = "alive";		
 	}
-	document.getElementById("population").innerHTML = "Population: " + population;				
+	document.getElementById("population").innerHTML = `Population: ${population}`;
 	displayBoard();	
 }
 			
@@ -294,8 +288,8 @@ function resetSimulation() {
 	running = false;
 	clearInterval(simulation);
 	initializeGameBoard();
-	document.getElementById("generation").innerHTML = "Generation: " + generation;
-	document.getElementById("population").innerHTML = "Population: " + population;
+	document.getElementById("generation").innerHTML = `Generation: ${generation}`;
+	document.getElementById("population").innerHTML = `Population: ${population}`;
 	displayBoard();
 }
 				
