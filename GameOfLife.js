@@ -35,10 +35,26 @@ const GosperGliderGun =          [[0,-17], [0,-16], [0,-7], [0,-1], [0,3], [0,4]
 
 
 let context;
-let deadTileImage = new Image();
-let aliveTileImage = new Image();
-deadTileImage.src = "Images/Box_Orange_Small_24x24.png";
-aliveTileImage.src = "Images/Box_Green_Small_24x24.png";
+
+
+let deadTileImage24 = new Image();
+let aliveTileImage24 = new Image();
+deadTileImage24.src = "Images/Box_Orange_Small_24x24.png";
+aliveTileImage24.src = "Images/Box_Green_Small_24x24.png";
+
+let deadTileImage12 = new Image();
+let aliveTileImage12 = new Image();
+deadTileImage12.src = "Images/Box_Orange_Medium_12x12.png";
+aliveTileImage12.src = "Images/Box_Green_Medium_12x12.png";
+
+let deadTileImage6 = new Image();
+let aliveTileImage6 = new Image();
+deadTileImage6.src = "Images/Box_Orange_Large_6x6.png";
+aliveTileImage6.src = "Images/Box_Green_Large_6x6.png";
+
+
+let deadTileImage = deadTileImage24;
+let aliveTileImage = aliveTileImage24;
 
 
 /** game state **/
@@ -168,7 +184,10 @@ function displayBoard(){
 	context.clearRect(0,0,1200,1200);
 	let xPos = 0;
 	let yPos = 0;
-				
+
+	console.log(aliveTileImage)
+	console.log(deadTileImage)
+
 	for(let rowIndex = 0; rowIndex < gridSettings.rows; rowIndex++) {
 		xPos = 0;
 		for(let columnIndex = 0; columnIndex < gridSettings.cols; columnIndex++) {
@@ -208,16 +227,16 @@ function updateBoard() {
 function setGridSize(size){
 	if(size === "small") {
 		gridSettings = smallGridSettings;
-		deadTileImage.src = "Images/Box_Orange_Small_24x24.png";
-		aliveTileImage.src = "Images/Box_Green_Small_24x24.png";
+		deadTileImage = deadTileImage24;
+		aliveTileImage = aliveTileImage24;
 	} else if(size === "medium") {
 		gridSettings = mediumGridSettings;
-		deadTileImage.src = "Images/Box_Orange_Medium_12x12.png";
-		aliveTileImage.src = "Images/Box_Green_Medium_12x12.png";
+		deadTileImage = deadTileImage12;
+		aliveTileImage = aliveTileImage12;
 	} else if(size === "large") {
 		gridSettings = largeGridSettings;
-		deadTileImage.src = "Images/Box_Orange_Large_6x6.png";
-		aliveTileImage.src = "Images/Box_Green_Large_6x6.png";
+		deadTileImage = deadTileImage6;
+		aliveTileImage = aliveTileImage6;
 	}
 	resetSimulation();	
 }
