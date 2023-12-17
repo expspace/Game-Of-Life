@@ -2,7 +2,7 @@
   "name": "game-of-life",
   "version": "1.0.0",
   "description": "This is a web based version of the popular Game Of Life, built using HTML, Javascript and CSS (Bootsrap).",
-  "main": "GameOfLife.js",
+  "main": "scripts/GameOfLife.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
     "start": "live-server . --port=8400"
