@@ -5,7 +5,9 @@
   "main": "scripts/GameOfLife.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "live-server . --port=8400"
+    "start": "live-server . --port=8400",
+    "format": "prettier --check scripts/* styles/*",
+    "format:fix": "prettier --write scripts/* styles/*"
   },
   "repository": {
     "type": "git",
@@ -18,6 +20,7 @@
   },
   "homepage": "https://github.com/expspace/Game-Of-Life#readme",
   "devDependencies": {
-    "live-server": "^1.2.2"
+    "live-server": "^1.2.2",
+    "prettier": "3.1.1"
   }
 }
