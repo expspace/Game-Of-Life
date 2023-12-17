@@ -1,0 +1,17 @@
+.info-panel {
+    font-family: monospace;
+    text-align: center;
+}
+
+.info-panel strong {
+    padding: 0 5px;
+}
+
+#gCanvas {
+    display: block;
+    margin: 0 auto;
+}
+
+.banner {
+    width: 600px;
+}
