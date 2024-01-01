@@ -3,50 +3,60 @@ Author: Sebastian Proctor-Shah
 -->
 
 <!DOCTYPE html>
-<html lang='en'> 
-	<head>
-		<title>GOL</title>	
-		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
-		<link rel="stylesheet" href="styles/GameOfLife.css">
-		<script type="module" src = "scripts/GameOfLife.js"></script>
-	</head>
-	<body class="app">
-		<nav class="navbar navbar-default">
-			<div>
-				<div class="row">
-					<button type="button" onclick='setGridSize("small")' class="btn btn-default"><img src = "images/Small_Grid_24x24.png"> </button>
-					<button type="button" onclick='setGridSize("medium")' class="btn btn-default"><img src = "images/Medium_Grid_12x12.png"> </button>
-					<button type="button" onclick='setGridSize("large")' class="btn btn-default"><img src = "images/Large_Grid_6x6.png"> </button>
-					<img class="banner" src = "images/GOLBanner.jpg">
-					<button type="button" onclick="startSimulation()" class="btn btn-success"><span class="glyphicon glyphicon-play" aria-hidden="true"></span> Start </button>
-					<button type="button" onclick="pauseSimulation()" class="btn btn-warning"><span class="glyphicon glyphicon-pause" aria-hidden="true"></span> Pause </button>
-					<button type="button" onclick="resetSimulation()" class="btn btn-danger"><span class="glyphicon glyphicon-refresh" aria-hidden="true"></span> Reset </button>
+<html lang='en'>
+<head>
+    <title>GOL</title>
+    <link rel="stylesheet" href="assets/css/bootstrap.css">
+    <link rel="stylesheet" href="styles/GameOfLife.css">
+    <script type="module" src="scripts/GameOfLife.js"></script>
+</head>
+<body class="app">
+<nav class="navbar navbar-default">
+    <div>
+        <div class="row">
+            <button type="button" onclick='setGridSize("small")' class="btn btn-default"><img
+                    src="images/Small_Grid_24x24.png"></button>
+            <button type="button" onclick='setGridSize("medium")' class="btn btn-default"><img
+                    src="images/Medium_Grid_12x12.png"></button>
+            <button type="button" onclick='setGridSize("large")' class="btn btn-default"><img
+                    src="images/Large_Grid_6x6.png"></button>
+            <img class="banner" src="images/GOLBanner.jpg" alt="gol-banner">
+            <button type="button" onclick="startSimulation()" class="btn btn-success"><span
+                    class="glyphicon glyphicon-play" aria-hidden="true"></span> Start
+            </button>
+            <button type="button" onclick="pauseSimulation()" class="btn btn-warning"><span
+                    class="glyphicon glyphicon-pause" aria-hidden="true"></span> Pause
+            </button>
+            <button type="button" onclick="resetSimulation()" class="btn btn-danger"><span
+                    class="glyphicon glyphicon-refresh" aria-hidden="true"></span> Reset
+            </button>
 
-					<button type="button" onclick='setGameSpeed(-50)' class="btn btn-default"><span class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span></button>
-					<button type="button" onclick='setGameSpeed(50)' class="btn btn-default"><span class="glyphicon glyphicon-minus-sign" aria-hidden="true"></span></button>
-				</div>
-				<div class="row">
-					<div class="info-panel">
-						<strong><span id="generation">Generation: 0</span></strong>
-						<strong><span id="population">Population: 0</span></strong>
-						<strong><span id="game speed">Game Speed: 150 ms/gen</span></strong>
-						<strong>
-							<select id = "patternSelect" onchange="setPattern()">
-								<option disabled selected> Pattern </option>
-								<option value = "RPentomino">R-pentomino</option>
-								<option value = "Diehard">Diehard</option>
-								<option value = "Acorn">Acorn </option>
-								<option value = "GlidersByTheDozen">Gliders by the dozen</option>
-								<option value = "Butterfly">Butterfly</option>
-								<option value = "GosperGliderGun">Gosper glider gun</option>
-							</select>
-						</strong>
-					</div>
-				</div>
-			</div>
-		</nav>
-		<div id='gamecanvas'>
-              <canvas id = "gCanvas" width = "1200" height = "1200" onclick="setTiles(event)"></canvas>
-		</div>
-	</body>
+            <button type="button" onclick='setGameSpeed(-50)' class="btn btn-default"><span
+                    class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span></button>
+            <button type="button" onclick='setGameSpeed(50)' class="btn btn-default"><span
+                    class="glyphicon glyphicon-minus-sign" aria-hidden="true"></span></button>
+        </div>
+        <div class="row">
+            <div class="info-panel">
+                <strong><span id="generation">Generation: 0</span></strong>
+                <strong><span id="population">Population: 0</span></strong>
+                <strong><span id="game speed">Game Speed: 150 ms/gen</span></strong>
+                <strong>
+                    <select id="patternSelect" onchange="setPattern()">
+                        <option disabled selected> Pattern</option>
+                        <option value="RPentomino">R-pentomino</option>
+                        <option value="Diehard">Diehard</option>
+                        <option value="Acorn">Acorn</option>
+                        <option value="GlidersByTheDozen">Gliders by the dozen</option>
+                        <option value="Butterfly">Butterfly</option>
+                        <option value="GosperGliderGun">Gosper glider gun</option>
+                    </select>
+                </strong>
+            </div>
+        </div>
+    </div>
+</nav>
+<canvas id="gCanvas" width="1200" height="1200" onclick="setTiles(event)"></canvas>
+
+</body>
 </html>
