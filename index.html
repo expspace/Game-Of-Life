@@ -8,7 +8,7 @@ Author: Sebastian Proctor-Shah
 		<title>GOL</title>	
 		<link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.4/css/bootstrap.min.css">
 		<link rel="stylesheet" href="styles/GameOfLife.css">
-		<script src = "scripts/GameOfLife.js"></script>
+		<script type="module" src = "scripts/GameOfLife.js"></script>
 	</head>
 	<body class="app">
 		<nav class="navbar navbar-default">
@@ -33,12 +33,12 @@ Author: Sebastian Proctor-Shah
 						<strong>
 							<select id = "patternSelect" onchange="setPattern()">
 								<option disabled selected> Pattern </option>
-								<option value = "R-pentomino">R-pentomino</option>
+								<option value = "RPentomino">R-pentomino</option>
 								<option value = "Diehard">Diehard</option>
 								<option value = "Acorn">Acorn </option>
-								<option value = "Gliders by the dozen">Gliders by the dozen</option>
+								<option value = "GlidersByTheDozen">Gliders by the dozen</option>
 								<option value = "Butterfly">Butterfly</option>
-								<option value = "Gosper glider gun">Gosper glider gun</option>
+								<option value = "GosperGliderGun">Gosper glider gun</option>
 							</select>
 						</strong>
 					</div>

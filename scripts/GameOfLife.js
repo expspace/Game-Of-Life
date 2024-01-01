@@ -1,3 +1,5 @@
+import { patterns } from "./patterns.js";
+
 /** config data **/
 
 //size settings
@@ -21,90 +23,6 @@ const largeGridSettings = {
   width: 6,
   height: 6,
 };
-
-//relative pattern coordinates
-const RPentominoCoords = [
-  [0, 0],
-  [1, 0],
-  [-1, 0],
-  [-1, 1],
-  [0, -1],
-];
-const Diehard = [
-  [0, 1],
-  [0, 2],
-  [0, 3],
-  [-2, 2],
-  [0, -3],
-  [-1, -3],
-  [-1, -4],
-];
-const Acorn = [
-  [0, 1],
-  [0, 2],
-  [0, 3],
-  [0, -2],
-  [0, -3],
-  [-2, -2],
-  [-1, 0],
-];
-const GlidersByTheDozen = [
-  [-1, -2],
-  [-1, -1],
-  [-1, 2],
-  [0, -2],
-  [0, 2],
-  [1, -2],
-  [1, 1],
-  [1, 2],
-];
-const Butterfly = [
-  [0, -1],
-  [0, 1],
-  [-1, -1],
-  [-1, 1],
-  [-2, -1],
-  [-2, 1],
-  [-2, 0],
-];
-const GosperGliderGun = [
-  [0, -17],
-  [0, -16],
-  [0, -7],
-  [0, -1],
-  [0, 3],
-  [0, 4],
-  [-2, 18],
-  [-2, 17],
-  [-3, 5],
-  [-3, 7],
-  [-4, 7],
-  [-2, 3],
-  [1, -17],
-  [1, -16],
-  [1, -7],
-  [1, -3],
-  [1, -1],
-  [1, 0],
-  [1, 5],
-  [1, 7],
-  [2, 7],
-  [2, -1],
-  [2, -7],
-  [3, -2],
-  [-1, -2],
-  [3, -6],
-  [4, -5],
-  [4, -4],
-  [-2, 4],
-  [-1, -6],
-  [-2, -5],
-  [-2, -4],
-  [-1, 3],
-  [-1, 4],
-  [-1, 17],
-  [-1, 18],
-];
 
 let context;
 
@@ -255,9 +173,6 @@ function displayBoard() {
   let xPos = 0;
   let yPos = 0;
 
-  console.log(aliveTileImage);
-  console.log(deadTileImage);
-
   for (let rowIndex = 0; rowIndex < gridSettings.rows; rowIndex++) {
     xPos = 0;
     for (let columnIndex = 0; columnIndex < gridSettings.cols; columnIndex++) {
@@ -343,28 +258,16 @@ function setTiles(event) {
 function setPattern() {
   const centerRowIndex = gridSettings.rows / 2;
   const centerColIndex = gridSettings.cols / 2;
-  let patternSelected = document.getElementById("patternSelect").value;
+  const patternSelectValue = document.getElementById("patternSelect").value;
+  const pattern = patterns[patternSelectValue];
 
   resetSimulation();
-  if (patternSelected === "R-pentomino") {
-    patternSelected = RPentominoCoords;
-  } else if (patternSelected === "Diehard") {
-    patternSelected = Diehard;
-  } else if (patternSelected === "Acorn") {
-    patternSelected = Acorn;
-  } else if (patternSelected === "Gliders by the dozen") {
-    patternSelected = GlidersByTheDozen;
-  } else if (patternSelected === "Butterfly") {
-    patternSelected = Butterfly;
-  } else if (patternSelected === "Gosper glider gun") {
-    patternSelected = GosperGliderGun;
-  }
 
-  population = patternSelected.length;
+  population = pattern.length;
 
-  for (let index = 0; index < patternSelected.length; index++) {
-    gameBoard[centerRowIndex + patternSelected[index][0]][
-      centerColIndex + patternSelected[index][1]
+  for (let index = 0; index < pattern.length; index++) {
+    gameBoard[centerRowIndex + pattern[index][0]][
+      centerColIndex + pattern[index][1]
     ] = "alive";
   }
   document.getElementById("population").innerHTML = `Population: ${population}`;
@@ -386,3 +289,12 @@ function resetSimulation() {
   document.getElementById("population").innerHTML = `Population: ${population}`;
   displayBoard();
 }
+
+window.startSimulation = startSimulation;
+window.pauseSimulation = pauseSimulation;
+window.resetSimulation = resetSimulation;
+
+window.setTiles = setTiles;
+window.setGridSize = setGridSize;
+window.setPattern = setPattern;
+window.setGameSpeed = setGameSpeed;
