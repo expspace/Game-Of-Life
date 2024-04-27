@@ -33,16 +33,16 @@ Author: Sebastian Proctor-Shah
                     class="glyphicon glyphicon-refresh" aria-hidden="true"></span> Reset
             </button>
 
-            <button type="button" onclick='setGameSpeed(-50)' class="btn btn-default"><span
+            <button type="button" onclick='updateGameSpeed(5)' class="btn btn-default"><span
                     class="glyphicon glyphicon-plus-sign" aria-hidden="true"></span></button>
-            <button type="button" onclick='setGameSpeed(50)' class="btn btn-default"><span
+            <button type="button" onclick='updateGameSpeed(-5)' class="btn btn-default"><span
                     class="glyphicon glyphicon-minus-sign" aria-hidden="true"></span></button>
         </div>
         <div class="row">
             <div class="info-panel">
                 <strong><span id="generation">Generation: 0</span></strong>
                 <strong><span id="population">Population: 0</span></strong>
-                <strong><span id="game speed">Game Speed: 150 ms/gen</span></strong>
+                <strong><span id="game speed">Game Speed: 10 gen/sec</span></strong>
                 <strong>
                     <select id="patternSelect" onchange="setPattern()">
                         <option disabled selected> Pattern</option>

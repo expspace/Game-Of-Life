@@ -1,19 +1,22 @@
+features
+========
 use svg tiles
 board fill viewport height/width 
 view rules pdf popup
 condense navbar height
-invert speed controls to generations/sec range [1,20]
 set alive/dead tile colors (also banner colors)
 extract pattern data to json
 import/export data file
 save/delete pattern
-
 deployment
+add disabled state to speed icons when running
 
-issues
+bugs
 ======
+resolution medium/large
 
-resoltion medium/large	
+
+done
+====
 double click set size
-
-
+invert speed controls to generations/sec range [1,20]

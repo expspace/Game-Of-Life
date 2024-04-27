@@ -44,6 +44,8 @@ aliveTileImage6.src = "../assets/images/Box_Green_Large_6x6.png";
 let deadTileImage = deadTileImage24;
 let aliveTileImage = aliveTileImage24;
 
+const MS_PER_SEC = 1000;
+
 /** game state **/
 
 let generation;
@@ -53,7 +55,7 @@ let running = false;
 let gameBoard;
 let updatedGameBoard;
 let gridSettings = smallGridSettings;
-let gameSpeed = 150;
+let gensPerSec = 10; // generations per seconds
 
 window.onload = function () {
   const canvas = document.getElementById("gCanvas");
@@ -65,6 +67,7 @@ window.onload = function () {
 /** game logic **/
 
 function startSimulation() {
+
   if (!running) {
     running = true;
     simulation = setInterval(function () {
@@ -77,7 +80,7 @@ function startSimulation() {
         `Generation: ${generation}`;
       document.getElementById("population").innerHTML =
         `Population: ${population}`;
-    }, gameSpeed);
+    }, MS_PER_SEC / gensPerSec);
   }
 }
 
@@ -229,12 +232,12 @@ function setGridSize(size) {
   resetSimulation();
 }
 
-function setGameSpeed(speed) {
+function updateGameSpeed(updateValue) {
   if (!running) {
-    const newSpeed = gameSpeed + speed;
-    if (newSpeed > 0 && newSpeed < 550) gameSpeed = newSpeed;
+    const newGensPerSec = gensPerSec + updateValue;
+    if (newGensPerSec > 0 && newGensPerSec < 100) gensPerSec = newGensPerSec;
     document.getElementById("game speed").innerHTML =
-      `Game Speed: ${gameSpeed} ms/gen`;
+      `Game Speed: ${newGensPerSec} gen/sec`;
   }
 }
 
@@ -297,4 +300,4 @@ window.resetSimulation = resetSimulation;
 window.setTiles = setTiles;
 window.setGridSize = setGridSize;
 window.setPattern = setPattern;
-window.setGameSpeed = setGameSpeed;
+window.updateGameSpeed = updateGameSpeed;
