@@ -1,4 +1,4 @@
-import { patterns } from "./patterns.js";
+import { patterns } from "../data/patterns.js";
 
 /** config data **/
 
@@ -28,18 +28,18 @@ let context;
 
 let deadTileImage24 = new Image();
 let aliveTileImage24 = new Image();
-deadTileImage24.src = "images/Box_Orange_Small_24x24.png";
-aliveTileImage24.src = "images/Box_Green_Small_24x24.png";
+deadTileImage24.src = "../assets/images/Box_Orange_Small_24x24.png";
+aliveTileImage24.src = "../assets/images/Box_Green_Small_24x24.png";
 
 let deadTileImage12 = new Image();
 let aliveTileImage12 = new Image();
-deadTileImage12.src = "images/Box_Orange_Medium_12x12.png";
-aliveTileImage12.src = "images/Box_Green_Medium_12x12.png";
+deadTileImage12.src = "../assets/images/Box_Orange_Medium_12x12.png";
+aliveTileImage12.src = "../assets/images/Box_Green_Medium_12x12.png";
 
 let deadTileImage6 = new Image();
 let aliveTileImage6 = new Image();
-deadTileImage6.src = "images/Box_Orange_Large_6x6.png";
-aliveTileImage6.src = "images/Box_Green_Large_6x6.png";
+deadTileImage6.src = "../assets/images/Box_Orange_Large_6x6.png";
+aliveTileImage6.src = "../assets/images/Box_Green_Large_6x6.png";
 
 let deadTileImage = deadTileImage24;
 let aliveTileImage = aliveTileImage24;
